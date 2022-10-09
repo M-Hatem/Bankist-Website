@@ -69,3 +69,22 @@ tabsContainer.addEventListener('click', e => {
   );
   activeContent.classList.add('operations__content--active');
 });
+
+// To style the navbar dynamically
+const nav = document.querySelector('nav');
+
+const handleHover = function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const links = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    links.forEach(link => {
+      if (link !== e.target) link.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
