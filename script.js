@@ -112,3 +112,23 @@ const observer = new IntersectionObserver(navObserve, {
   rootMargin: `-${navHeight}px`,
 });
 observer.observe(header);
+
+// Apply intersection observer for all sections
+const sections = document.querySelectorAll('.section');
+const showSection = function (entries, observer) {
+  const [entry] = entries;
+  const target = entry.target;
+
+  if (!entry.isIntersecting) return;
+  target.classList.remove('section--hidden');
+  sectionObserver.unobserve(target);
+};
+const sectionObserver = new IntersectionObserver(showSection, {
+  root: null,
+  threshold: 0.2,
+});
+
+sections.forEach(section => {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
