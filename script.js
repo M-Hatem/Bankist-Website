@@ -88,3 +88,27 @@ const handleHover = function (e) {
 
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
+
+// To make the sticky nave
+// The old way with scroll event which is bad for performance
+// const section1Properties = section1.getBoundingClientRect();
+// window.addEventListener('scroll', e => {
+//   if (window.scrollY > section1Properties.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+
+// The new way with intersection observer API
+const header = document.querySelector('header');
+const navHeight = nav.getBoundingClientRect().height;
+
+const navObserve = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+const observer = new IntersectionObserver(navObserve, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+observer.observe(header);
