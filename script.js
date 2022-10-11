@@ -157,3 +157,72 @@ const imgsObserver = new IntersectionObserver(loadImgs, {
 });
 
 imgs.forEach(img => imgsObserver.observe(img));
+
+// To Make the carasoul
+const slides = document.querySelectorAll('.slide');
+const leftBtn = document.querySelector('.slider__btn--left');
+const rightBtn = document.querySelector('.slider__btn--right');
+const dotsContainer = document.querySelector('.dots');
+
+const goToSlide = function (number) {
+  slides.forEach(
+    (slide, i) => (slide.style.transform = `translateX(${100 * (i - number)}%`)
+  );
+};
+
+const createDots = function (index) {
+  const dot = `<button class="dots__dot" data-slide="${index}"></button>`;
+  dotsContainer.insertAdjacentHTML('beforeend', dot);
+};
+
+const activeSlide = function (index) {
+  dotsContainer
+    .querySelectorAll('.dots__dot')
+    .forEach(dot => dot.classList.remove('dots__dot--active'));
+  dotsContainer
+    .querySelector(`.dots__dot[data-slide="${index}"]`)
+    .classList.add('dots__dot--active');
+};
+
+slides.forEach((_, i) => {
+  createDots(i);
+});
+
+// To reset the carasoul after page reload
+
+const moveSlide = function (slide) {
+  goToSlide(slide);
+  activeSlide(slide);
+};
+
+moveSlide(0);
+
+let currSlide = 0;
+
+const nextImg = function () {
+  currSlide++;
+  if (currSlide === slides.length) currSlide = 0;
+  moveSlide(currSlide);
+};
+
+const prevImg = function () {
+  currSlide--;
+  if (currSlide < 0) currSlide = slides.length - 1;
+  moveSlide(currSlide);
+};
+
+rightBtn.addEventListener('click', nextImg);
+leftBtn.addEventListener('click', prevImg);
+
+document.addEventListener('keydown', e => {
+  e.key === 'ArrowLeft' && prevImg() && activeSlide(currSlide);
+  e.key === 'ArrowRight' && nextImg() && activeSlide(currSlide);
+});
+
+// Event Delegation
+dotsContainer.addEventListener('click', e => {
+  if (e.target.classList.contains('dots__dot')) {
+    const slide = e.target.dataset.slide;
+    moveSlide(slide);
+  }
+});
